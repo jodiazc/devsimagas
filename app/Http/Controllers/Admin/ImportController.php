@@ -107,7 +107,7 @@ class ImportController extends Controller
 
             // Esperar 10 segundos antes de procesar la siguiente fila
             $elapsedTime = Carbon::now()->diffInSeconds($startTime);
-            $waitTime = max(0, 10 - $elapsedTime % 10);
+            $waitTime = max(0, 1 - $elapsedTime % 1);
             if ($waitTime > 0) {
                 sleep($waitTime); // Esperar el tiempo restante para completar 10 segundos
             }
