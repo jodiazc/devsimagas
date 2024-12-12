@@ -13,6 +13,10 @@ class ImportController extends Controller
 {
     public function import(Request $request)
     {
+        public function __construct()
+        {
+            ini_set('max_execution_time', 3600);
+        }
         // Validar el archivo
         $request->validate([
             'file' => 'required|file|mimes:csv,txt,xlsx|max:2048', // Ajusta las reglas según tus necesidades
