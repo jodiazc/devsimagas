@@ -11,10 +11,6 @@ use Carbon\Carbon;
 
 class ImportController extends Controller
 {
-    public function __construct()
-    {
-        ini_set('max_execution_time', 3600); // 5 minutos
-    }
     public function import(Request $request)
     {
         // Validar el archivo
