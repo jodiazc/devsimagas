@@ -25,7 +25,6 @@ class Process_Payments extends Command
     {
         Log::info("Procesando Pagos a ver si funciona para ser ejecutado desde un cron");
 
-        /**
         //$paymentLinks = PaymentLink::all();
         $paymentLinks = PaymentLink::where('estaus', '1')->get();
 
@@ -61,7 +60,6 @@ class Process_Payments extends Command
                 Log::error("Payment failed for PaymentLink ID: {$paymentLink->id}. Response: " . json_encode($response));
             }
 
-        } */
-
+        }
     }
 }
