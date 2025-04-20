@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RegistroLecturas;
+use Intervention\Image\Facades\Image;
 
 
 class RegistroLecturasController extends Controller
@@ -28,25 +29,33 @@ class RegistroLecturasController extends Controller
             'cliente' => 'string|max:255',
             'lectura_inicial' => 'required|string|max:255',
             'lectura_final' => 'required|string',
-            'imagen_lectura' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
+            'imagen_lectura' => 'required|file|mimes:jpeg,png,jpg|max:4096', // Aumenté el límite por si acaso
             'almacen' => 'string|max:255',
         ]);
     
-        // Sanitizar los datos para el nombre del archivo
+        // Sanitizar nombres
         $cliente = str_replace(' ', '_', strtolower($request->cliente));
         $almacen = str_replace(' ', '_', strtolower($request->almacen));
         $timestamp = now()->format('Ymd_His');
     
-        // Obtener la extensión
-        $extension = $request->file('imagen_lectura')->getClientOriginalExtension();
-    
-        // Construir el nombre del archivo
+        // Archivo original
+        $file = $request->file('imagen_lectura');
+        $extension = $file->getClientOriginalExtension();
         $filename = "{$almacen}_{$cliente}_{$timestamp}.{$extension}";
+        $path = "archivos/{$filename}";
     
-        // Guardar el archivo en la carpeta "archivos"
-        $path = $request->file('imagen_lectura')->storeAs('archivos', $filename, 'public');
+        // Redimensionar y comprimir imagen
+        $image = Image::make($file)
+            ->resize(1200, null, function ($constraint) {
+                $constraint->aspectRatio(); // Mantiene proporciones
+                $constraint->upsize();      // No agranda si es pequeña
+            })
+            ->encode($extension, 70); // Comprime (calidad 70%)
     
-        // Guardar en la base de datos
+        // Guardar en disco 'public'
+        \Storage::disk('public')->put($path, (string) $image);
+    
+        // Guardar en base de datos
         RegistroLecturas::create([
             'cliente' => $request->cliente,
             'lectura_inicial' => $request->lectura_inicial,
@@ -55,26 +64,7 @@ class RegistroLecturasController extends Controller
         ]);
     
         return redirect()->back()->with('success', 'Registro guardado correctamente.');
-    }    
+    } 
 
-    /*public function store(Request $request)
-    {
-        $request->validate([
-            'cliente' => 'required|string|max:255',
-            'lectura_inicial' => 'required|string|max:255',
-            'lectura_final' => 'required|string',
-            'imagen_lectura' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048',
-        ]);
 
-        $path = $request->file('imagen_lectura')->store('archivos', 'public');
-
-        RegistroLecturas::create([
-            'cliente' => $request->cliente,
-            'lectura_inicial' => $request->lectura_inicial,
-            'lectura_final' => $request->lectura_final,
-            'imagen_lectura' => $path,
-        ]);
-
-        return redirect()->back()->with('success', 'Registro guardado correctamente.');
-    }*/
 }
