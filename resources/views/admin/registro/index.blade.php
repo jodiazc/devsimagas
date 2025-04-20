@@ -32,7 +32,7 @@
                         @endphp
 
                         @if(in_array(strtolower($extension), ['jpg', 'jpeg', 'png']))
-                            <img src="{{ asset('storage/app/public/' . $registro->imagen_lectura) }}" alt="Imagen">
+                            <img src="{{ asset('storage/app/public/' . $registro->imagen_lectura) }}" alt="Imagen" width="250" height="250">
                         @elseif($extension === 'pdf')
                             <a href="{{ asset('storage/' . $registro->imagen_lectura) }}" target="_blank">📄 Ver PDF</a>
                         @else
