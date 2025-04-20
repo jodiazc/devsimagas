@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UploadFilesController;
 use App\Http\Controllers\Admin\FileController;
+use App\Http\Controllers\Admin\RegistroLecturasController;
+use App\Http\Controllers\Admin\AlmacenController;
 
 Route::get('',[HomeController::class,'index'])->name('admin.home');
 Route::resource('payments', PaymentLinkController::class)->names([
@@ -48,3 +50,14 @@ Route::prefix('/upload-files')->group(function () {
 Route::get('/uploads/files/{filename}', [UploadFilesController::class, 'showFile'])->name('admin.upload_files.showFile');
 
 //Route::get('/admin/files/{filename}', [FileController::class, 'show']);
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/registro', [RegistroLecturasController::class, 'create'])->name('registro.create');
+    Route::get('/registros', [RegistroLecturasController::class, 'index'])->name('registro.index');
+    Route::post('/registro', [RegistroLecturasController::class, 'store'])->name('registro.store');
+});
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/almacenes', [AlmacenController::class, 'index'])->name('almacenes.index');
+});
