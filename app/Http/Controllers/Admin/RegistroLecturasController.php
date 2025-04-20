@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\RegistroLecturas;
 use Intervention\Image\Facades\Image;
 
-
 class RegistroLecturasController extends Controller
 {
     public function index()
