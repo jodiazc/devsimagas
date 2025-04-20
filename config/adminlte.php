@@ -361,6 +361,38 @@ return [
             ],
         ],
 
+        [
+            'text' => 'Lecturas',
+            'icon' => 'fas fa-fw fa-money-bill-wave',
+            'can' => 'admin.registro.index',
+            'submenu' => [
+                [
+                    'text' => 'Crear Lectura',
+                    'route' => 'admin.registro.create',
+                    'icon' => 'fas fa-fw fa-list',
+                    'can' => 'admin.registro.create',
+                ],
+                [
+                    'text' => 'Listado Lectura',
+                    'route' => 'admin.registro.index',
+                    'icon' => 'fas fa-fw fa-list',
+                    'can' => 'admin.registro.index',
+                ]
+                /*,
+                [
+                    'text' => 'Registro Lectura',
+                    'route' => 'admin.registro.create',
+                    'icon' => 'fas fa-fw fa-file-import',
+                    'can' => 'admin.registro.create',
+                ]*/
+            ]
+        ],
+        [
+            'text' => 'Almacenes',
+            'route' => 'admin.almacenes.index',
+            'icon' => 'fas fa-users-cog',
+            'can' => 'admin.almacenes.index',
+        ],
         /*
         ['header' => 'account_settings'],
         [
