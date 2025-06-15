@@ -10,6 +10,7 @@ class RegistroLecturas extends Model
     use HasFactory;
 
     protected $fillable = [
+        'almacen',
         'cliente',
         'lectura_inicial',
         'lectura_final',

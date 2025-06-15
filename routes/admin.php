@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\UploadFilesController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\RegistroLecturasController;
 use App\Http\Controllers\Admin\AlmacenController;
+use App\Http\Controllers\Admin\McliadmController;
 
 Route::get('',[HomeController::class,'index'])->name('admin.home');
 Route::resource('payments', PaymentLinkController::class)->names([
@@ -59,5 +60,34 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/almacenes', [AlmacenController::class, 'index'])->name('almacenes.index');
+    Route::get('/almacenes', [AlmacenController::class, 'index'])->name('almacenes.index');    
+});
+
+/*Route::prefix('admin')->name('admin.')->group(function () {
+
+    // Listar todos
+    Route::get('/mcliadms', [McliadmController::class, 'index'])->name('mcliadms.index');
+
+    // Mostrar formulario para crear nuevo
+    Route::get('/mcliadms/create', [McliadmController::class, 'create'])->name('mcliadms.create');
+
+    // Guardar nuevo registro
+    Route::post('/mcliadms', [McliadmController::class, 'store'])->name('mcliadms.store');
+
+    // Mostrar registro específico
+    Route::get('/mcliadms/{mcliadm}', [McliadmController::class, 'show'])->name('mcliadms.show');
+
+    // Mostrar formulario para editar
+    Route::get('/mcliadms/{mcliadm}/edit', [McliadmController::class, 'edit'])->name('mcliadms.edit');
+
+    // Actualizar registro existente
+    Route::put('/mcliadms/{mcliadm}', [McliadmController::class, 'update'])->name('mcliadms.update');
+    Route::patch('/mcliadms/{mcliadm}', [McliadmController::class, 'update']); // opcional si usas patch también
+
+    // Eliminar registro
+    Route::delete('/mcliadms/{mcliadm}', [McliadmController::class, 'destroy'])->name('mcliadms.destroy');
+
+});*/
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('mcliadms', McliadmController::class);
 });

@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('registro_lecturas', function (Blueprint $table) {
             $table->id();
+            $table->string('almacen');
             $table->string('cliente');
-            $table->string('lectuira_inicial');
+            $table->string('lectura_inicial');
             $table->text('lectura_final');
             $table->string('imagen_lectura');
             $table->timestamps();
