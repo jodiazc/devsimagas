@@ -56,6 +56,7 @@ class RegistroLecturasController extends Controller
     
         // Guardar en base de datos
         RegistroLecturas::create([
+            'almacen' => $request->almacen,
             'cliente' => $request->cliente,
             'lectura_inicial' => $request->lectura_inicial,
             'lectura_final' => $request->lectura_final,
@@ -64,6 +65,4 @@ class RegistroLecturasController extends Controller
     
         return redirect()->back()->with('success', 'Registro guardado correctamente.');
     } 
-
-
 }
