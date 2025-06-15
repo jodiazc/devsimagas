@@ -26,7 +26,6 @@ class RegistroLecturasController extends Controller
     {
         $request->validate([
             'cliente' => 'string|max:255',
-            'lectura_inicial' => 'required|string|max:255',
             'lectura_final' => 'required|string',
             'imagen_lectura' => 'required|file|mimes:jpeg,png,jpg|max:4096', // Aumenté el límite por si acaso
             'almacen' => 'string|max:255',
@@ -58,11 +57,12 @@ class RegistroLecturasController extends Controller
         RegistroLecturas::create([
             'almacen' => $request->almacen,
             'cliente' => $request->cliente,
-            'lectura_inicial' => $request->lectura_inicial,
             'lectura_final' => $request->lectura_final,
             'imagen_lectura' => $path,
         ]);
     
-        return redirect()->back()->with('success', 'Registro guardado correctamente.');
+        //return redirect()->back()->with('success', 'Registro guardado correctamente.');
+        return redirect()->route('admin.mcliadms.index')->with('success', 'Registro guardado correctamente.');
+
     } 
 }
