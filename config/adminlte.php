@@ -360,7 +360,7 @@ return [
                 ]
             ],
         ],
-
+        /*
         [
             'text' => 'Lecturas',
             'icon' => 'fas fa-fw fa-money-bill-wave',
@@ -378,18 +378,12 @@ return [
                     'icon' => 'fas fa-fw fa-list',
                     'can' => 'admin.registro.index',
                 ]
-                /*,
-                [
-                    'text' => 'Registro Lectura',
-                    'route' => 'admin.registro.create',
-                    'icon' => 'fas fa-fw fa-file-import',
-                    'can' => 'admin.registro.create',
-                ]*/
             ]
         ],
+        */
         [
-            'text' => 'Almacenes',
-            'route' => 'admin.almacenes.index',
+            'text' => 'Lecturas',
+            'route' => 'admin.mcliadms.index',
             'icon' => 'fas fa-users-cog',
             'can' => 'admin.almacenes.index',
         ],

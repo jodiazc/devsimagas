@@ -14,7 +14,6 @@
             <thead>
             <tr>
                 <th>Ciente</th>
-                <th>lectura_inicial</th>
                 <th>lectura_final</th>
                 <th>Archivo</th>
                 <th>Fecha</th>
@@ -24,7 +23,6 @@
             @foreach($registros as $registro)
                 <tr>
                     <td>{{ $registro->cliente }}</td>
-                    <td>{{ $registro->lectura_inicial }}</td>
                     <td>{{ $registro->lectura_final }}</td>
                     <td>
                         @php

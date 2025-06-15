@@ -25,11 +25,6 @@
                         @csrf
 
                         <div class="form-group">
-                            <label for="lectura_inicial">Lectura inicial:</label>
-                            <input type="text" name="lectura_inicial" class="form-control" required>
-                        </div>
-
-                        <div class="form-group">
                             <label for="lectura_final">Lectura final:</label>
                             <input type="text" name="lectura_final" class="form-control" required>
                         </div>
