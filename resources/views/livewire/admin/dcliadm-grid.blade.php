@@ -37,7 +37,7 @@
                             </td>
                             <td>
                                 @if ($ultimaLectura?->imagen_lectura)
-                                    <a href="{{ asset('storage/' . $ultimaLectura->imagen_lectura) }}" target="_blank">Ver foto</a>
+                                    <a href="{{ asset('public/storage/' . $ultimaLectura->imagen_lectura) }}" target="_blank">Ver foto</a>
                                 @else
                                     <span class="text-muted">Sin foto</span>
                                 @endif
