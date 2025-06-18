@@ -14,6 +14,7 @@ class McliadmSearch extends Component
     public $sugerencias = [];
     public $mostrarResultados = false;
     public $mostrarSugerenciasDebug = false;
+    public $mostrarLista = false;
 
     public function updatedSearch()
     {
@@ -97,6 +98,19 @@ class McliadmSearch extends Component
             $this->activeTab = $key;
             $this->mostrarResultados = true;
         }
+    }
+
+    public function seleccionar($value)
+    {
+        // Asignar valor seleccionado al input
+        $this->search = $value;
+
+        // Ocultar la lista de sugerencias
+        $this->mostrarLista = false;
+
+        // Llamar buscar para mostrar resultados correspondientes
+        $this->buscar();
+        $this->mostrarResultados = true;
     }
 
     public function render()
