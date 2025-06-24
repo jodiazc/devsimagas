@@ -29,11 +29,13 @@ class RegistroLecturasController extends Controller
             'lectura_final' => 'required|string',
             'imagen_lectura' => 'required|file|mimes:jpeg,png,jpg|max:4096', // Aumenté el límite por si acaso
             'almacen' => 'string|max:255',
+            'observaciones' => 'string|max:255',
         ]);
     
         // Sanitizar nombres
         $cliente = str_replace(' ', '_', strtolower($request->cliente));
         $almacen = str_replace(' ', '_', strtolower($request->almacen));
+        $observaciones = $request->observaciones;
         $timestamp = now()->format('Ymd_His');
     
         // Archivo original
@@ -59,10 +61,20 @@ class RegistroLecturasController extends Controller
             'cliente' => $request->cliente,
             'lectura_final' => $request->lectura_final,
             'imagen_lectura' => $path,
+            'observaciones' => $observaciones,
+            
         ]);
     
         //return redirect()->back()->with('success', 'Registro guardado correctamente.');
-        return redirect()->route('admin.mcliadms.index')->with('success', 'Registro guardado correctamente.');
+        //return redirect()->route('admin.mcliadms.index',['cliente' => $request->cliente,'almacen' => $request->almacen])->with('success', 'Registro guardado correctamente.');
+        //return redirect()->route('admin.mcliadms.index')
+        //->with('success', 'Registro guardado correctamente.')
+        //->with('cliente', $request->cliente)
+        //->with('almacen', $request->almacen);
+        return redirect()->route('admin.mcliadms.index', [
+            'cliente' => $request->cliente,
+            'almacen' => $request->almacen,
+        ])->with('success', 'Registro guardado correctamente.');        
 
     } 
 }

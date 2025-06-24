@@ -29,6 +29,11 @@
                             <input type="text" name="lectura_final" class="form-control" required>
                         </div>
 
+                        <div class="form-group">
+                            <label for="observaciones">Observaciones:</label>
+                            <input type="text" name="observaciones" class="form-control" required>
+                        </div>                        
+
                         <input type="hidden" name="almacen" value="{{ $almacen }}">
                         <input type="hidden" name="cliente" value="{{ $cliente }}">
 

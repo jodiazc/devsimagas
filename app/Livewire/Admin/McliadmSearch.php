@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Mcliadm;
+use Illuminate\Http\Request;
 
 class McliadmSearch extends Component
 {
@@ -15,6 +16,8 @@ class McliadmSearch extends Component
     public $mostrarResultados = false;
     public $mostrarSugerenciasDebug = false;
     public $mostrarLista = false;
+    public $almacen = null;
+    public $successMessage = null;
 
     public function updatedSearch()
     {
@@ -90,13 +93,18 @@ class McliadmSearch extends Component
                 $key = "Resultados para '{$search}'";
             }
 
-            // Agregar solo si no existe para evitar duplicados
-            if (!array_key_exists($key, $this->clientesPorBusqueda)) {
-                $this->clientesPorBusqueda[$key] = $resultados->values();
-            }
+            // Reemplazar todo el contenido para evitar acumulación de tabs
+            $this->clientesPorBusqueda = [
+                $key => $resultados->values(),
+            ];
 
             $this->activeTab = $key;
             $this->mostrarResultados = true;
+        } else {
+            // Opcional: limpiar resultados si no hay coincidencias
+            $this->clientesPorBusqueda = [];
+            $this->mostrarResultados = false;
+            $this->activeTab = null;
         }
     }
 
@@ -113,9 +121,28 @@ class McliadmSearch extends Component
         $this->mostrarResultados = true;
     }
 
+    public function mount(Request $request)
+    {
+        if ($request->filled('almacen')) {
+            $this->search = $request->almacen;
+            $this->buscar(); // Ejecuta la búsqueda usando el valor inicial
+            $this->mostrarResultados = true;
+        }
+        if (session()->has('success')) {
+            $this->successMessage = session('success');
+        }        
+    }
+
     public function render()
     {
-        return view('livewire.admin.mcliadm-search');
+        return view('livewire.admin.mcliadm-search', [
+            'almacen' => $this->almacen,
+        ]);
+    }
+
+    public function clearSuccessMessage()
+    {
+        $this->successMessage = null;
     }
 
     private function interpolateQuery($sql, $bindings)
