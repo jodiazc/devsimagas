@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\RegistroLecturasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware(['api.key'])->prefix('registro-lecturas')->group(function () {
+    Route::get('/', [RegistroLecturasController::class, 'index']);
+    Route::get('/buscar', [RegistroLecturasController::class, 'buscar']);
+    Route::post('/', [RegistroLecturasController::class, 'store']);
+    Route::get('/{id}', [RegistroLecturasController::class, 'show']);
+    Route::put('/{id}', [RegistroLecturasController::class, 'update']);
+    Route::delete('/{id}', [RegistroLecturasController::class, 'destroy']);
 });

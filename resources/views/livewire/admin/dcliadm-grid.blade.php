@@ -43,7 +43,7 @@
                                 @endif
                             </td>
                             <td>
-                                {{ $ultimaLectura?->observacion ?? 'Sin observación' }}
+                                {{ $ultimaLectura?->observaciones ?? 'Sin observación' }}
                             </td>
                         </tr>
                     @endforeach
