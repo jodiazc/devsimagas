@@ -100,4 +100,22 @@ class RegistroLecturasController extends Controller
 
         return response()->json($resultados);
     }
+
+    public function actualizarEstatus(Request $request, $id)
+    {
+        $registro = RegistroLecturas::find($id);
+
+        if (!$registro) {
+            return response()->json(['message' => 'Registro no encontrado'], 404);
+        }
+
+        $data = $request->validate([
+            'estatus_registro' => 'required|string|max:100',
+        ]);
+
+        $registro->estatus_registro = $data['estatus_registro'];
+        $registro->save();
+
+        return response()->json(['message' => 'Estatus actualizado', 'registro' => $registro]);
+    }    
 }
