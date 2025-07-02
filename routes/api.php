@@ -26,7 +26,7 @@ Route::middleware(['api.key'])->prefix('registro-lecturas')->group(function () {
     Route::get('/{id}', [RegistroLecturasController::class, 'show']);
     Route::put('/{id}', [RegistroLecturasController::class, 'update']);
     Route::delete('/{id}', [RegistroLecturasController::class, 'destroy']);
-    Route::put('/{id}/estatus', [RegistroLecturasController::class, 'actualizarEstatus']);
+    Route::post('/{id}/estatus', [RegistroLecturasController::class, 'actualizarEstatus']);
 });
 
 
