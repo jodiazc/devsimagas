@@ -5,6 +5,11 @@
 @can('admin.users.index')
 @section('content_header')
     <h1>Lista de Usuarios</h1>
+    <!--@ can('admin.users.create')-->
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Crear Usuario
+        </a>
+    <!--@ endcan-->    
 @stop
 @else 
 <div>
