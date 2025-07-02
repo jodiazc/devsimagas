@@ -25,7 +25,9 @@ Route::resource('payments', PaymentLinkController::class)->names([
     'destroy' => 'admin.payments.destroy',
 ]);
 
-Route::resource('users',UserController::class)->only(['index','edit','update'])->names('admin.users');
+Route::resource('users', UserController::class)
+    ->only(['index', 'create', 'store', 'edit', 'update'])
+    ->names('admin.users');
 
 Route::resource('roles',RoleController::class)->names('admin.roles');
 
