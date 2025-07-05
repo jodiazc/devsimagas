@@ -13,9 +13,9 @@
                         <th>Depa</th>
                         <th>Estatus</th>
                         <th>Procesar</th>
-                        <th>Lectura</th>
+                        <!--th>Lectura</th>
                         <th>Foto</th>
-                        <th>Observacion</th>
+                        <th>Observacion</th-->
                     </tr>
                 </thead>
                 <tbody>
@@ -32,19 +32,19 @@
                             <td>
                                 <a href="{{ route('admin.registro.create', ['almacen' => $dcliadm->K_CLIADM, 'cliente' => $dcliadm->REFERENCIA]) }}" class="btn btn-sm btn-info">Procesar</a>
                             </td>
-                            <td>
-                                {{ $ultimaLectura?->lectura_final ?? 'Sin lectura' }}
+                            <!--td>
+                                { { $ultimaLectura?->lectura_final ?? 'Sin lectura' }}
                             </td>
                             <td>
-                                @if ($ultimaLectura?->imagen_lectura)
-                                    <a href="{{ asset('public/storage/' . $ultimaLectura->imagen_lectura) }}" target="_blank">Ver foto</a>
-                                @else
+                                @ if ($ultimaLectura?->imagen_lectura)
+                                    <a href="{ { asset('public/storage/' . $ultimaLectura->imagen_lectura) }}" target="_blank">Ver foto</a>
+                                @ else
                                     <span class="text-muted">Sin foto</span>
-                                @endif
+                                @ endif
                             </td>
                             <td>
-                                {{ $ultimaLectura?->observaciones ?? 'Sin observación' }}
-                            </td>
+                                { { $ultimaLectura?->observaciones ?? 'Sin observación' }}
+                            </td-->
                         </tr>
                     @endforeach
                 </tbody>
