@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RegistroLecturas;
+use App\Models\DcliadmDatosPeriodo;
 use Intervention\Image\Facades\Image;
 
 class RegistroLecturasController extends Controller
@@ -64,6 +65,14 @@ class RegistroLecturasController extends Controller
             'observaciones' => $observaciones,
             
         ]);
+
+        // Actualizar campo ESTATUS en DcliadmDatosPeriodo
+        $datosPeriodo = DcliadmDatosPeriodo::where('REFERENCIA', $request->cliente)->first();
+
+        if ($datosPeriodo) {
+            $datosPeriodo->ESTATUS = 'P'; // O el valor que necesites
+            $datosPeriodo->save();
+        }        
     
         //return redirect()->back()->with('success', 'Registro guardado correctamente.');
         //return redirect()->route('admin.mcliadms.index',['cliente' => $request->cliente,'almacen' => $request->almacen])->with('success', 'Registro guardado correctamente.');

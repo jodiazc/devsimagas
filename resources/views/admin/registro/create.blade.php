@@ -21,7 +21,7 @@
             <div class="row">
                 <!-- Columna izquierda: formulario -->
                 <div class="col-md-4">
-                    <form action="{{ route('admin.registro.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="formRegistro" action="{{ route('admin.registro.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group">
@@ -60,6 +60,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmación Bootstrap -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmar envío</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que los datos ingresados son correctos y deseas enviarlos?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" id="confirmSubmit" class="btn btn-primary">Sí, enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('js')
@@ -67,7 +88,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         const input = document.getElementById('imagen_lectura');
         const previewContainer = document.getElementById('previewContainer');
+        const form = document.getElementById('formRegistro');
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        let allowSubmit = false;
 
+        // Vista previa
         if (input && previewContainer) {
             input.addEventListener('change', function(event) {
                 const file = event.target.files[0];
@@ -98,6 +123,23 @@
                 }
             });
         }
+
+        // Interceptar el envío y mostrar modal
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (!allowSubmit) {
+                    e.preventDefault();
+                    confirmModal.show();
+                }
+            });
+        }
+
+        // Confirmar desde el modal
+        document.getElementById('confirmSubmit').addEventListener('click', function () {
+            allowSubmit = true;
+            confirmModal.hide();
+            form.submit();
+        });
     });
 </script>
 @stop
