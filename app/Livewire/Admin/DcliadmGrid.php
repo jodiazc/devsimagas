@@ -4,7 +4,8 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Dcliadm;
+//use App\Models\Dcliadm;
+use App\Models\DcliadmDatosPeriodo;
 use App\Models\RegistroLecturas;
 use Illuminate\Support\Facades\DB;
 
@@ -30,8 +31,9 @@ class DcliadmGrid extends Component
     {
         DB::enableQueryLog();
 
-        $query = Dcliadm::query()
+        $query = DcliadmDatosPeriodo::query()
             ->where('K_CLIADM', $this->kCliadm);
+            //->where('ESTATUS', '!=', 'P')
 
         if (!empty($this->search)) {
             $query->where(function ($q) {
