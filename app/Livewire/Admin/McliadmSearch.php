@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\Mcliadm;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class McliadmSearch extends Component
 {
@@ -21,10 +22,8 @@ class McliadmSearch extends Component
 
     public function updatedSearch()
     {
-        // No ocultar resultados aquí, solo limpiar sugerencias si está vacío
         if (trim($this->search) === '') {
             $this->sugerencias = [];
-            // No cambiar $mostrarResultados para que se mantengan tabs visibles
             return;
         }
 
@@ -38,22 +37,30 @@ class McliadmSearch extends Component
         if ($coincidencia) {
             $this->buscar();
             $this->mostrarResultados = true;
-        } 
-        // No ocultar resultados si no hay coincidencia, solo no mostrar sugerencias nuevas
+        }
     }
 
     private function generarSugerencias($search)
     {
-        $query = Mcliadm::query();
+        $query = Mcliadm::query()
+            ->whereRaw("TRIM(UPPER(ESTATUS)) = 'A'")
+            ->where(function ($q) use ($search) {
+                if (ctype_digit($search)) {
+                    $q->whereRaw("CAST(K_CLIADM AS UNSIGNED) LIKE ?", ["%{$search}%"]);
+                } else {
+                    $q->where(function ($sub) use ($search) {
+                        $sub->where('NOMRESP', 'like', '%' . $search . '%')
+                            ->orWhereRaw("CAST(K_CLIADM AS CHAR) LIKE ?", ["%{$search}%"]);
+                    });
+                }
+            });
 
-        if (ctype_digit($search)) {
-            $query->whereRaw("CAST(K_CLIADM AS UNSIGNED) LIKE ?", ["%{$search}%"]);
-        } else {
-            $query->where('NOMRESP', 'like', '%' . $search . '%')
-                  ->orWhereRaw("CAST(K_CLIADM AS CHAR) LIKE ?", ["%{$search}%"]);
-        }
+        // Log para depuración
+        $sql = $this->interpolateQuery($query->toSql(), $query->getBindings());
+        Log::info('[McliadmSearch] Query generarSugerencias: ' . $sql);
 
-        $resultados = $query->limit(5)->get(['K_CLIADM', 'NOMRESP']);
+        // Solo las columnas necesarias para el autocompletado
+        $resultados = $query->get(['K_CLIADM', 'NOMRESP']);
 
         return $resultados->map(function ($item) {
             return [
@@ -67,41 +74,41 @@ class McliadmSearch extends Component
     public function buscar()
     {
         $search = trim($this->search);
+        if ($search === '') return;
 
-        if ($search === '') {
-            return; // No limpiar búsquedas previas ni ocultar tabs
-        }
+        $query = Mcliadm::query()
+            ->whereRaw("TRIM(UPPER(ESTATUS)) = 'A'")
+            ->where(function ($q) use ($search) {
+                if (ctype_digit($search)) {
+                    $q->whereRaw("CAST(K_CLIADM AS UNSIGNED) = ?", [$search]);
+                } else {
+                    $q->where(function ($sub) use ($search) {
+                        $sub->where('NOMRESP', 'like', "%{$search}%")
+                            ->orWhereRaw("CAST(K_CLIADM AS CHAR) LIKE ?", ["%{$search}%"]);
+                    });
+                }
+            });
 
-        if (ctype_digit($search)) {
-            $query = Mcliadm::whereRaw("CAST(K_CLIADM AS UNSIGNED) = ?", [$search]);
-        } else {
-            $query = Mcliadm::where('NOMRESP', 'like', "%{$search}%");
-        }
-
+        // Log para depuración
         $this->queryDebug = $this->interpolateQuery($query->toSql(), $query->getBindings());
+        Log::info('[McliadmSearch] Query buscar: ' . $this->queryDebug);
 
+        // Limpiar resultados previos para evitar acumulación
+        $this->clientesPorBusqueda = [];
+
+        // Ahora trae TODAS las columnas de la tabla
         $resultados = $query->get();
 
         if ($resultados->isNotEmpty()) {
             $coincidencia = collect($this->sugerencias)->firstWhere('value', $this->search);
 
-            if ($coincidencia) {
-                $key = $coincidencia['label'];
-            } elseif (ctype_digit($search)) {
-                $key = "Código: {$search}";
-            } else {
-                $key = "Resultados para '{$search}'";
-            }
+            $key = $coincidencia['label']
+                ?? (ctype_digit($search) ? "Código: {$search}" : "Resultados para '{$search}'");
 
-            // Reemplazar todo el contenido para evitar acumulación de tabs
-            $this->clientesPorBusqueda = [
-                $key => $resultados->values(),
-            ];
-
+            $this->clientesPorBusqueda = [$key => $resultados->values()];
             $this->activeTab = $key;
             $this->mostrarResultados = true;
         } else {
-            // Opcional: limpiar resultados si no hay coincidencias
             $this->clientesPorBusqueda = [];
             $this->mostrarResultados = false;
             $this->activeTab = null;
@@ -110,13 +117,8 @@ class McliadmSearch extends Component
 
     public function seleccionar($value)
     {
-        // Asignar valor seleccionado al input
         $this->search = $value;
-
-        // Ocultar la lista de sugerencias
         $this->mostrarLista = false;
-
-        // Llamar buscar para mostrar resultados correspondientes
         $this->buscar();
         $this->mostrarResultados = true;
     }
@@ -125,12 +127,12 @@ class McliadmSearch extends Component
     {
         if ($request->filled('almacen')) {
             $this->search = $request->almacen;
-            $this->buscar(); // Ejecuta la búsqueda usando el valor inicial
+            $this->buscar();
             $this->mostrarResultados = true;
         }
         if (session()->has('success')) {
             $this->successMessage = session('success');
-        }        
+        }
     }
 
     public function render()
